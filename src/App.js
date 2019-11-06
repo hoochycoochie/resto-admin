@@ -13,11 +13,11 @@ import {
   ROOT_PATH,
   LOGIN_PATH,
   RESTAURANT_ROOT_PATH,
-  RESTAURANT_TEAM_PATH,
+  ADMIN_TEAM_PATH,
   NOT_FOUND_PATH,
   USER_STORAGE,
   RESTAURANT_COMMAND_PATH,
-  RESTAURANT_SETTINGS_PATH,
+   
   ADMIN_COMPANY_PATH
 } from "./utils/static_constants";
 import { GET_CURRENT_LANG_QUERY } from "./graphql/store/query-mutation/settings";
@@ -26,7 +26,8 @@ import {
   TeamViewList,
   CompanySettingsView,
   ConditionsView,
-  CompanyViewList
+  CompanyViewList,
+  TeamListView
 } from "./containers/admin";
 
 class App extends React.Component {
@@ -69,6 +70,7 @@ class App extends React.Component {
             />
 
             <AuthRoute path={ADMIN_COMPANY_PATH} component={CompanyViewList} />
+            <AuthRoute path={ADMIN_TEAM_PATH} component={TeamListView} />
           </Switch>
         </BrowserRouter>
       </IntlProvider>

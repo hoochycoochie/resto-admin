@@ -10,21 +10,16 @@ import {
 import { withRouter } from "react-router-dom";
 import {
   RESTAURANT_ROOT_PATH,
-  RESTAURANT_TEAM_PATH,
-  RESTAURANT_SUBCAT_PATH,
-  RESTAURANT_PRODUCT_PATH,
-  //  RESTAURANT_SUBPROD_PATH,
-  RESTAURANT_COMMAND_PATH,
-  RESTAURANT_CREATE_PRODUCT_PATH,
-  RESTAURANT_SETTINGS_PATH,
-  ADMIN_COMPANY_PATH
+  ADMIN_COMPANY_PATH,
+  ADMIN_TEAM_PATH,
+  RESTAURANT_COMMAND_PATH
 } from "../../utils/static_constants";
 import { FormattedMessage } from "react-intl";
 import { colors } from "../../utils/constants";
 
 function SideMenu({
   children,
-  toggle,
+
   menu: { loading, ...rest },
   location: { pathname }
 }) {
@@ -38,7 +33,7 @@ function SideMenu({
   const commandActive = pathname.toString() === RESTAURANT_COMMAND_PATH;
 
   const companyActive = pathname.toString() === ADMIN_COMPANY_PATH;
-
+  const teamActive = pathname.toString() === ADMIN_TEAM_PATH;
   return (
     <div className="parent" style={{ padding: 10, marginTop: 10 }}>
       <div className={(smallMenu ? "small-side " : "") + "side"}>
@@ -80,6 +75,18 @@ function SideMenu({
           >
             <TextIcon hideText={smallMenu} name="shop">
               restaurants
+            </TextIcon>
+          </Menu.Item>
+
+          <Menu.Item
+            as={Link}
+            to={ADMIN_TEAM_PATH}
+            name="dashboard"
+            active={teamActive}
+            style={teamActive ? activeStyle : {}}
+          >
+            <TextIcon hideText={smallMenu} name="users">
+              <FormattedMessage id="team" />
             </TextIcon>
           </Menu.Item>
         </Menu>

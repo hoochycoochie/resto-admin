@@ -16,6 +16,7 @@ const RESTAURANT_CREATE_PRODUCT_PATH = "/senyobante/product/new";
 const NOT_FOUND_PATH = "/notfound";
 
 const ADMIN_COMPANY_PATH = "/senyobante/companies";
+const ADMIN_TEAM_PATH = "/senyobante/team";
 export {
   USER_STORAGE,
   TOKEN_NAME,
@@ -32,5 +33,6 @@ export {
   RESTAURANT_COMMAND_PATH,
   RESTAURANT_CREATE_PRODUCT_PATH,
   RESTAURANT_SETTINGS_PATH,
-  ADMIN_COMPANY_PATH
+  ADMIN_COMPANY_PATH,
+  ADMIN_TEAM_PATH
 };

@@ -39,8 +39,7 @@ const loginSchema = Yup.object().shape({
     .required(<FormattedMessage id="required" />),
 
   password: Yup.string()
-    .trim()
-    .required(<FormattedMessage id="required" />)
+  .required(<FormattedMessage id="required" />)
 });
 export default compose(
   graphql(loginAdminMutation, { name: "loginUser" }),
@@ -54,6 +53,7 @@ export default compose(
       { props: { loginUser, setUser }, setSubmitting, setFieldError }
     ) => {
       try {
+        console.log("password",password)
         const response = await loginUser({
           variables: { password, identifiant }
         });
