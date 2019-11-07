@@ -17,10 +17,12 @@ const NOT_FOUND_PATH = "/notfound";
 
 const ADMIN_COMPANY_PATH = "/senyobante/companies";
 const ADMIN_TEAM_PATH = "/senyobante/team";
+const ADMIN_CATEGORY_PATH = "/senyobante/categories";
 export {
   USER_STORAGE,
   TOKEN_NAME,
   COMPANY_ID_STORAGE,
+  ADMIN_CATEGORY_PATH,
   RESTAURANT_ROOT_PATH,
   RESTAURANT_TEAM_PATH,
   RESTAURANT_SUBCAT_PATH,

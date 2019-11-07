@@ -17,17 +17,17 @@ import {
   NOT_FOUND_PATH,
   USER_STORAGE,
   RESTAURANT_COMMAND_PATH,
-   
-  ADMIN_COMPANY_PATH
+  ADMIN_COMPANY_PATH,
+  ADMIN_CATEGORY_PATH
 } from "./utils/static_constants";
 import { GET_CURRENT_LANG_QUERY } from "./graphql/store/query-mutation/settings";
 import {
   CommandViewList,
   TeamViewList,
-  CompanySettingsView,
   ConditionsView,
   CompanyViewList,
-  TeamListView
+  TeamListView,
+  CategoryViewList
 } from "./containers/admin";
 
 class App extends React.Component {
@@ -70,7 +70,11 @@ class App extends React.Component {
             />
 
             <AuthRoute path={ADMIN_COMPANY_PATH} component={CompanyViewList} />
-            <AuthRoute path={ADMIN_TEAM_PATH} component={TeamListView} />
+            <AuthRoute path={ADMIN_TEAM_PATH} component={TeamViewList} />
+            <AuthRoute
+              path={ADMIN_CATEGORY_PATH}
+              component={CategoryViewList}
+            />
           </Switch>
         </BrowserRouter>
       </IntlProvider>

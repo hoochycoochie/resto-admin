@@ -12,7 +12,8 @@ import {
   RESTAURANT_ROOT_PATH,
   ADMIN_COMPANY_PATH,
   ADMIN_TEAM_PATH,
-  RESTAURANT_COMMAND_PATH
+  RESTAURANT_COMMAND_PATH,
+  ADMIN_CATEGORY_PATH
 } from "../../utils/static_constants";
 import { FormattedMessage } from "react-intl";
 import { colors } from "../../utils/constants";
@@ -34,6 +35,7 @@ function SideMenu({
 
   const companyActive = pathname.toString() === ADMIN_COMPANY_PATH;
   const teamActive = pathname.toString() === ADMIN_TEAM_PATH;
+  const categoryActive = pathname.toString() === ADMIN_CATEGORY_PATH;
   return (
     <div className="parent" style={{ padding: 10, marginTop: 10 }}>
       <div className={(smallMenu ? "small-side " : "") + "side"}>
@@ -87,6 +89,18 @@ function SideMenu({
           >
             <TextIcon hideText={smallMenu} name="users">
               <FormattedMessage id="team" />
+            </TextIcon>
+          </Menu.Item>
+
+          <Menu.Item
+            as={Link}
+            to={ADMIN_CATEGORY_PATH}
+            name="dashboard"
+            active={categoryActive}
+            style={categoryActive ? activeStyle : {}}
+          >
+            <TextIcon hideText={smallMenu} name="settings">
+              catégories
             </TextIcon>
           </Menu.Item>
         </Menu>

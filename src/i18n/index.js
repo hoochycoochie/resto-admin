@@ -124,7 +124,9 @@ export default {
     min_10_characters: "Minimum 10 characters",
     max_100_characters: "Maximum 100 characters",
     company_creation: "Add restaurant",
-    lastname: "lastname"
+    lastname: "lastname",
+    roles:"Roles",
+    already_exist:"already exists"
   },
 
   fr: {
@@ -306,6 +308,8 @@ export default {
     min_10_characters: "Minimum 10 caractères",
     max_100_characters: "Maximum 100 caractères",
     company_creation: "Ajout restaurant",
-    lastname: "Prénom"
+    lastname: "Prénom",
+    roles:"Roles",
+    already_exist:"existe déja"
   }
 };

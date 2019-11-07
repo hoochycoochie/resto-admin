@@ -2,5 +2,12 @@ import CommandViewList from "./CommandViewList";
 
 import ConditionsView from "./ConditionsView";
 import CompanyViewList from "./CompanyViewList";
-import TeamListView from "./TeamListView";
-export { CommandViewList, CompanyViewList, ConditionsView, TeamListView };
+import TeamViewList from "./TeamViewList";
+import CategoryViewList from "./CategoryViewList";
+export {
+  CommandViewList,
+  CompanyViewList,
+  ConditionsView,
+  TeamViewList,
+  CategoryViewList
+};

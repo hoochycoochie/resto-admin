@@ -8,7 +8,6 @@ export const createProductMutation = gql`
         id
         name
         company_id
-        name
         description
         created_at
         updated_at

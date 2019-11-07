@@ -37,16 +37,10 @@ export const findUsersAdminQuery = gql`
       data {
         id
         name
+        lastname
         phone
         picture
         email
-
-        roles {
-          member_id
-          role_id
-          name
-          company_id
-        }
 
         created_at
         updated_at

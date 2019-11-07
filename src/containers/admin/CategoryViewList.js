@@ -8,20 +8,21 @@ import { Header } from "semantic-ui-react";
 import { colors } from "../../utils/constants";
 import { FormattedMessage } from "react-intl";
 import ApolloCacheUpdater from "apollo-cache-updater";
-import { createCompanyMutation } from "../../graphql/mutation/company";
-import { findUsersAdminQuery } from "../../graphql/query/user";
-import TeamCreate from "../../components/team/TeamCreate";
-import TeamList from "../../components/team/TeamList";
-import TeamSearch from "../../components/team/TeamSearch";
+import { findCategoryAdminQuery } from "../../graphql/query/category";
+import { createCategoryMutation } from "../../graphql/mutation/category";
+import CategorySearch from "../../components/category/CategorySearch";
+import CategoryList from "../../components/category/CategorycatList";
+import CategoryCreate from "../../components/category/CategoryCreate";
 
-function CompanyViewList({
-  users: { loading, fetchMore, ...rest },
+function CategoryViewList({
+  cats: { loading, fetchMore, ...rest },
   handleSubmit: handleSubmit2,
   ...secondRest
 }) {
   const [activePage, setActivePage] = useState(1);
   const [name, setName] = useState("");
   const [createModal, setCreateModal] = useState(false);
+
   if (loading) {
     return (
       <Layout>
@@ -29,12 +30,7 @@ function CompanyViewList({
       </Layout>
     );
   }
-  const isEmpty = obj => {
-    for (var key in obj) {
-      if (obj.hasOwnProperty(key)) return false;
-    }
-    return true;
-  };
+
   const load = async variables => {
     await fetchMore({
       variables: {
@@ -43,9 +39,9 @@ function CompanyViewList({
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
 
-        const { findUsersAdmin } = fetchMoreResult;
+        const { findCategory } = fetchMoreResult;
         return Object.assign({}, prev, {
-          findUsersAdmin
+          findCategory
         });
       }
     });
@@ -56,8 +52,7 @@ function CompanyViewList({
 
       const variables = {
         skip,
-        take,
-        is_team_member: true
+        take
       };
       if (name && name.trim().length > 0) {
         variables.name = name;
@@ -83,21 +78,27 @@ function CompanyViewList({
   const handleSubmit = async () => {
     try {
       const {
-        values: { name, description, reference, owner_id, file },
+        values: { name, file },
         setSubmitting,
         setFieldError,
         handleReset,
         save
       } = secondRest;
-      if (!name || !description || !reference || !owner_id || !file) return;
       await setSubmitting(true);
       const response = await save({
-        variables: { name, description, reference, owner_id, file },
-        update: async (proxy, { data }) => {
-          const mutationResult = data.createUser.user; // mutation result to pass into the updater
+        variables: { name, file },
+        update: async (
+          proxy,
+          {
+            data: {
+              createCategory: { category }
+            }
+          }
+        ) => {
+          const mutationResult = category; // mutation result to pass into the updater
           const updates = ApolloCacheUpdater({
             proxy, // apollo proxy
-            queriesToUpdate: [findUsersAdminQuery], // queries you want to automatically update
+            queriesToUpdate: [findCategoryAdminQuery], // queries you want to automatically update
             searchVariables: {},
             mutationResult,
             operation: {
@@ -115,13 +116,15 @@ function CompanyViewList({
         }
       });
 
-      const { ok, errors } = response.data.createUser;
+      const { ok, errors } = response.data.createCategory;
 
       if (ok) {
         await setSubmitting(false);
         await handleReset();
         await setCreateModal(false);
       } else {
+        await setSubmitting(false);
+
         errors.forEach(error => {
           const message = <FormattedMessage id={error.message} />;
           setFieldError(error.path, message);
@@ -132,10 +135,10 @@ function CompanyViewList({
       console.log("error login user", error);
     }
   };
-
   const {
-    findUsersAdmin: { data, skip, take, total }
+    findCategoryAdmin: { data, skip, take, total }
   } = rest;
+
   return (
     <Layout>
       <div>
@@ -147,7 +150,7 @@ function CompanyViewList({
             fontStyle: "italic"
           }}
         >
-          {<FormattedMessage id="company_list" />}
+          {<FormattedMessage id="subcat_list" />}
         </Header>
         <Header
           floated="left"
@@ -160,7 +163,7 @@ function CompanyViewList({
         ></Header>
       </div>
 
-      <TeamSearch
+      <CategorySearch
         modal={async () => await setCreateModal(true)}
         name={name}
         disabled={!name || name.trim().length === 0}
@@ -168,7 +171,7 @@ function CompanyViewList({
         onChange={onSearchChange}
       />
 
-      <TeamList
+      <CategoryList
         onPageChange={onPageChange}
         activePage={activePage}
         data={data}
@@ -177,9 +180,8 @@ function CompanyViewList({
         loading={loading}
         take={take}
       />
-      <TeamCreate
+      <CategoryCreate
         {...secondRest}
-        disabled={isEmpty(secondRest.errors) ? false : true}
         handleSubmit={handleSubmit}
         open={createModal}
         cancel={async () => await setCreateModal(false)}
@@ -187,59 +189,43 @@ function CompanyViewList({
     </Layout>
   );
 }
-const registerSchema = Yup.object().shape({
+const FILE_SIZE = 1600 * 1024;
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
+const createCategorySchema = Yup.object().shape({
   name: Yup.string()
     .trim()
     .typeError(<FormattedMessage id="required" />)
     .min(2, <FormattedMessage id="min_2_characters" />)
-    .max(50, <FormattedMessage id="max_50_characters" />)
+    .max(100, <FormattedMessage id="max_100_characters" />)
     .required(<FormattedMessage id="required" />),
 
-  phone: Yup.string()
-    .trim()
-    .typeError(<FormattedMessage id="required" />)
-    .min(2, <FormattedMessage id="min_2_characters" />)
-    .max(50, <FormattedMessage id="max_50_characters" />)
-    .required(<FormattedMessage id="required" />),
-
-  email: Yup.string()
-    .trim()
-    .typeError(<FormattedMessage id="required" />)
-    .min(2, <FormattedMessage id="min_2_characters" />)
-    .max(300, <FormattedMessage id="max_50_characters" />)
-    .required(<FormattedMessage id="required" />),
-
-  lastname: Yup.string()
-    .trim()
-    .typeError(<FormattedMessage id="required" />)
-    .min(2, <FormattedMessage id="min_2_characters" />)
-    .max(50, <FormattedMessage id="max_50_characters" />)
-    .required(<FormattedMessage id="required" />),
-
-  password: Yup.string()
-    .trim()
-    .typeError(<FormattedMessage id="required" />)
-    .min(2, <FormattedMessage id="min_2_characters" />)
-    .max(50, <FormattedMessage id="max_50_characters" />)
+  file: Yup.mixed()
     .required(<FormattedMessage id="required" />)
+    .test("fileFormat", <FormattedMessage id="not_supported" />, value => {
+      if (value) {
+        return value && SUPPORTED_FORMATS.includes(value.type);
+      }
+      return true;
+    })
+    .test("fileSize", <FormattedMessage id="file_too_large" />, value => {
+      if (value) {
+        return value && value.size <= FILE_SIZE;
+      }
+      return true;
+    })
 });
+
 export default compose(
-  graphql(createCompanyMutation, { name: "save" }),
-  graphql(findUsersAdminQuery, {
-    name: "users",
+  graphql(createCategoryMutation, { name: "save" }),
+  graphql(findCategoryAdminQuery, {
+    name: "cats",
     options: () => ({
-      variables: { is_team_member: true },
+      variables: {},
       fetchPolicy: "cache"
     })
   }),
   withFormik({
-    validationSchema: registerSchema,
-    mapPropsToValues: () => ({
-      name: "",
-      reference: "",
-      file: null,
-      description: "",
-      owner_id: ""
-    })
+    validationSchema: createCategorySchema,
+    mapPropsToValues: () => ({ name: "", file: null })
   })
-)(CompanyViewList);
+)(CategoryViewList);
