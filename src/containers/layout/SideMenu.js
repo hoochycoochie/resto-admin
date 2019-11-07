@@ -13,7 +13,9 @@ import {
   ADMIN_COMPANY_PATH,
   ADMIN_TEAM_PATH,
   RESTAURANT_COMMAND_PATH,
-  ADMIN_CATEGORY_PATH
+  ADMIN_CATEGORY_PATH,
+  ADMIN_RESTAURER_PATH,
+  ADMIN_DELIVERER_PATH
 } from "../../utils/static_constants";
 import { FormattedMessage } from "react-intl";
 import { colors } from "../../utils/constants";
@@ -36,6 +38,8 @@ function SideMenu({
   const companyActive = pathname.toString() === ADMIN_COMPANY_PATH;
   const teamActive = pathname.toString() === ADMIN_TEAM_PATH;
   const categoryActive = pathname.toString() === ADMIN_CATEGORY_PATH;
+  const restaurerActive = pathname.toString() === ADMIN_RESTAURER_PATH;
+  const delivererActive = pathname.toString() === ADMIN_DELIVERER_PATH;
   return (
     <div className="parent" style={{ padding: 10, marginTop: 10 }}>
       <div className={(smallMenu ? "small-side " : "") + "side"}>
@@ -75,8 +79,8 @@ function SideMenu({
             active={companyActive}
             style={companyActive ? activeStyle : {}}
           >
-            <TextIcon hideText={smallMenu} name="shop">
-              restaurants
+            <TextIcon hideText={smallMenu} name="food">
+              Restos
             </TextIcon>
           </Menu.Item>
 
@@ -88,10 +92,32 @@ function SideMenu({
             style={teamActive ? activeStyle : {}}
           >
             <TextIcon hideText={smallMenu} name="users">
-              <FormattedMessage id="team" />
+              Equipe senYobante
             </TextIcon>
           </Menu.Item>
 
+          <Menu.Item
+            as={Link}
+            to={ADMIN_RESTAURER_PATH}
+            name="dashboard"
+            active={restaurerActive}
+            style={restaurerActive ? activeStyle : {}}
+          >
+            <TextIcon hideText={smallMenu} name="user secret">
+              Restaurateurs
+            </TextIcon>
+          </Menu.Item>
+          <Menu.Item
+            as={Link}
+            to={ADMIN_DELIVERER_PATH}
+            name="dashboard"
+            active={delivererActive}
+            style={delivererActive ? activeStyle : {}}
+          >
+            <TextIcon hideText={smallMenu} name="motorcycle">
+              Livreurs
+            </TextIcon>
+          </Menu.Item>
           <Menu.Item
             as={Link}
             to={ADMIN_CATEGORY_PATH}

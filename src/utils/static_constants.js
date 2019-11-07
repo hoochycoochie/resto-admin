@@ -18,7 +18,10 @@ const NOT_FOUND_PATH = "/notfound";
 const ADMIN_COMPANY_PATH = "/senyobante/companies";
 const ADMIN_TEAM_PATH = "/senyobante/team";
 const ADMIN_CATEGORY_PATH = "/senyobante/categories";
+const ADMIN_DELIVERER_PATH = "/senyobante/deliveries";
+const ADMIN_RESTAURER_PATH = "/senyobante/restaurers";
 export {
+  ADMIN_RESTAURER_PATH,
   USER_STORAGE,
   TOKEN_NAME,
   COMPANY_ID_STORAGE,
@@ -36,5 +39,6 @@ export {
   RESTAURANT_CREATE_PRODUCT_PATH,
   RESTAURANT_SETTINGS_PATH,
   ADMIN_COMPANY_PATH,
-  ADMIN_TEAM_PATH
+  ADMIN_TEAM_PATH,
+  ADMIN_DELIVERER_PATH
 };

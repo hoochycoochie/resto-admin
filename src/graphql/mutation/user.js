@@ -64,3 +64,79 @@ export const createTeamMemberMutation = gql`
     }
   }
 `;
+
+
+export const createDelivererMutation = gql`
+  mutation createDeliverer(
+    $phone: String!
+    $password: String!
+    $name: String!
+    $lastname: String!
+    $email: String!
+    
+  ) {
+    createDeliverer(
+      phone: $phone
+      password: $password
+      name: $name
+      lastname: $lastname
+      email: $email
+      
+    ) {
+      ok
+      user {
+        id
+        email
+        lastname
+        name
+        picture
+        phone
+        
+        created_at
+        updated_at
+      }
+      errors {
+        path
+        message
+      }
+    }
+  }
+`;
+
+
+export const createRestaurerMutation = gql`
+  mutation createRestaurer(
+    $phone: String!
+    $password: String!
+    $name: String!
+    $lastname: String!
+    $email: String!
+    
+  ) {
+    createRestaurer(
+      phone: $phone
+      password: $password
+      name: $name
+      lastname: $lastname
+      email: $email
+      
+    ) {
+      ok
+      user {
+        id
+        email
+        lastname
+        name
+        picture
+        phone
+        
+        created_at
+        updated_at
+      }
+      errors {
+        path
+        message
+      }
+    }
+  }
+`;

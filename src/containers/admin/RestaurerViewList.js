@@ -7,15 +7,15 @@ import Loading from "../../components/Loading";
 import { Header } from "semantic-ui-react";
 import { colors } from "../../utils/constants";
 import { FormattedMessage } from "react-intl";
-import CompanySearch from "../../components/company/CompanySearch";
-import CompanyCreate from "../../components/company/CompanyCreate";
-import CompanyList from "../../components/company/CompanyList";
 import ApolloCacheUpdater from "apollo-cache-updater";
-import { findCompanyAdminQuery } from "../../graphql/query/company";
-import { createCompanyMutation } from "../../graphql/mutation/company";
+import { findRestaurersAdminQuery } from "../../graphql/query/user";
+import { createRestaurerMutation } from "../../graphql/mutation/user";
+import RestaurerCreate from "../../components/restaurer/RestaurerCreate";
+import RestaurerList from "../../components/restaurer/RestaurerList";
+import RestaurerSearch from "../../components/restaurer/RestaurerSearch";
 
-function CompanyViewList({
-  companies: { loading, fetchMore, ...rest },
+function TeamViewList({
+  users: { loading, fetchMore, ...rest },
   handleSubmit: handleSubmit2,
   ...secondRest
 }) {
@@ -43,9 +43,9 @@ function CompanyViewList({
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
 
-        const { findCompanyAdmin } = fetchMoreResult;
+        const { findRestaurersAdmin } = fetchMoreResult;
         return Object.assign({}, prev, {
-          findCompanyAdmin
+          findRestaurersAdmin
         });
       }
     });
@@ -82,21 +82,24 @@ function CompanyViewList({
   const handleSubmit = async () => {
     try {
       const {
-        values: { name, description, reference, owner_id, file },
+        values: { email, phone, password, name, lastname },
         setSubmitting,
         setFieldError,
         handleReset,
         save
       } = secondRest;
-      if (!name || !description || !reference || !owner_id || !file) return;
+      if (!email || !phone || !password || !name || !lastname) return;
       await setSubmitting(true);
+      const variables = { email, phone, password, name, lastname };
+
       const response = await save({
-        variables: { name, description, reference, owner_id, file },
+        variables,
         update: async (proxy, { data }) => {
-          const mutationResult = data.createCompany.company; // mutation result to pass into the updater
+          console.log("data", data);
+          const mutationResult = data.createRestaurer.user; // mutation result to pass into the updater
           const updates = ApolloCacheUpdater({
             proxy, // apollo proxy
-            queriesToUpdate: [findCompanyAdminQuery], // queries you want to automatically update
+            queriesToUpdate: [findRestaurersAdminQuery], // queries you want to automatically update
             searchVariables: {},
             mutationResult,
             operation: {
@@ -113,27 +116,28 @@ function CompanyViewList({
           console.log("updates", updates);
         }
       });
-      console.log("response.data.createCompany", response.data.createCompany);
-      const { ok, errors } = response.data.createCompany;
+
+      const { ok, errors } = response.data.createRestaurer;
 
       if (ok) {
         await setSubmitting(false);
         await handleReset();
         await setCreateModal(false);
       } else {
-        errors.forEach(error => {
+        await setSubmitting(false);
+        errors.forEach(async error => {
           const message = <FormattedMessage id={error.message} />;
-          setFieldError(error.path, message);
-          setSubmitting(false);
+          await setFieldError(error.path, message);
         });
       }
     } catch (error) {
+      await secondRest.setSubmitting(false);
       console.log("error login user", error);
     }
   };
 
   const {
-    findCompanyAdmin: { data, skip, take, total }
+    findRestaurersAdmin: { data, skip, take, total }
   } = rest;
   return (
     <Layout>
@@ -146,7 +150,7 @@ function CompanyViewList({
             fontStyle: "italic"
           }}
         >
-          Tous les restaurants
+          Liste des Restaurateurs
         </Header>
         <Header
           floated="left"
@@ -159,7 +163,7 @@ function CompanyViewList({
         ></Header>
       </div>
 
-      <CompanySearch
+      <RestaurerSearch
         modal={async () => await setCreateModal(true)}
         name={name}
         disabled={!name || name.trim().length === 0}
@@ -167,7 +171,7 @@ function CompanyViewList({
         onChange={onSearchChange}
       />
 
-      <CompanyList
+      <RestaurerList
         onPageChange={onPageChange}
         activePage={activePage}
         data={data}
@@ -176,7 +180,7 @@ function CompanyViewList({
         loading={loading}
         take={take}
       />
-      <CompanyCreate
+      <RestaurerCreate
         {...secondRest}
         disabled={isEmpty(secondRest.errors) ? false : true}
         handleSubmit={handleSubmit}
@@ -186,64 +190,58 @@ function CompanyViewList({
     </Layout>
   );
 }
-
-const FILE_SIZE = 1600 * 1024;
-const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
-const createCompanySchema = Yup.object().shape({
+const registerSchema = Yup.object().shape({
   name: Yup.string()
     .trim()
     .typeError(<FormattedMessage id="required" />)
     .min(2, <FormattedMessage id="min_2_characters" />)
-    .max(100, <FormattedMessage id="max_100_characters" />)
+    .max(50, <FormattedMessage id="max_50_characters" />)
     .required(<FormattedMessage id="required" />),
 
-  reference: Yup.string()
+  phone: Yup.string()
     .trim()
     .typeError(<FormattedMessage id="required" />)
-    .min(10, <FormattedMessage id="min_10_characters" />)
-    .max(100, <FormattedMessage id="max_100_characters" />)
+    .min(2, <FormattedMessage id="min_2_characters" />)
+    .max(50, <FormattedMessage id="max_50_characters" />)
     .required(<FormattedMessage id="required" />),
 
-  owner_id: Yup.string().required(<FormattedMessage id="required" />),
-  description: Yup.string()
+  email: Yup.string()
     .trim()
-    .min(100, <FormattedMessage id="min_100_characters" />)
-    .required(<FormattedMessage id="required" />)
-    .max(500, <FormattedMessage id="max_500_characters" />),
+    .typeError(<FormattedMessage id="required" />)
+    .min(2, <FormattedMessage id="min_2_characters" />)
+    .max(300, <FormattedMessage id="max_50_characters" />)
+    .required(<FormattedMessage id="required" />),
 
-  file: Yup.mixed()
+  lastname: Yup.string()
+    .trim()
+    .typeError(<FormattedMessage id="required" />)
+    .min(2, <FormattedMessage id="min_2_characters" />)
+    .max(50, <FormattedMessage id="max_50_characters" />)
+    .required(<FormattedMessage id="required" />),
+
+  password: Yup.string()
+    .trim()
+    .typeError(<FormattedMessage id="required" />)
+    .min(2, <FormattedMessage id="min_2_characters" />)
+    .max(50, <FormattedMessage id="max_50_characters" />)
     .required(<FormattedMessage id="required" />)
-    .test("fileFormat", <FormattedMessage id="not_supported" />, value => {
-      if (value) {
-        return value && SUPPORTED_FORMATS.includes(value.type);
-      }
-      return true;
-    })
-    .test("fileSize", <FormattedMessage id="file_too_large" />, value => {
-      if (value) {
-        return value && value.size <= FILE_SIZE;
-      }
-      return true;
-    })
 });
-
 export default compose(
-  graphql(createCompanyMutation, { name: "save" }),
-  graphql(findCompanyAdminQuery, {
-    name: "companies",
+  graphql(createRestaurerMutation, { name: "save" }),
+  graphql(findRestaurersAdminQuery, {
+    name: "users",
     options: () => ({
-      variables: {},
       fetchPolicy: "cache"
     })
   }),
   withFormik({
-    validationSchema: createCompanySchema,
+    validationSchema: registerSchema,
     mapPropsToValues: () => ({
+      email: "",
+      password: "",
+      phone: "",
       name: "",
-      reference: "",
-      file: null,
-      description: "",
-      owner_id: ""
+      lastname: ""
     })
   })
-)(CompanyViewList);
+)(TeamViewList);

@@ -18,7 +18,9 @@ import {
   USER_STORAGE,
   RESTAURANT_COMMAND_PATH,
   ADMIN_COMPANY_PATH,
-  ADMIN_CATEGORY_PATH
+  ADMIN_CATEGORY_PATH,
+  ADMIN_DELIVERER_PATH,
+  ADMIN_RESTAURER_PATH
 } from "./utils/static_constants";
 import { GET_CURRENT_LANG_QUERY } from "./graphql/store/query-mutation/settings";
 import {
@@ -26,8 +28,9 @@ import {
   TeamViewList,
   ConditionsView,
   CompanyViewList,
-  TeamListView,
-  CategoryViewList
+  CategoryViewList,
+  DelivererViewList,
+  RestaurerViewList
 } from "./containers/admin";
 
 class App extends React.Component {
@@ -74,6 +77,15 @@ class App extends React.Component {
             <AuthRoute
               path={ADMIN_CATEGORY_PATH}
               component={CategoryViewList}
+            />
+            <AuthRoute
+              path={ADMIN_DELIVERER_PATH}
+              component={DelivererViewList}
+            />
+
+            <AuthRoute
+              path={ADMIN_RESTAURER_PATH}
+              component={RestaurerViewList}
             />
           </Switch>
         </BrowserRouter>

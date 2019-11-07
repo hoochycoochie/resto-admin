@@ -7,7 +7,7 @@ import Loading from "../../components/Loading";
 import { Header } from "semantic-ui-react";
 import { colors } from "../../utils/constants";
 import { FormattedMessage } from "react-intl";
-import ApolloCacheUpdater from "apollo-cache-updater"; 
+import ApolloCacheUpdater from "apollo-cache-updater";
 import { findUsersAdminQuery } from "../../graphql/query/user";
 import TeamCreate from "../../components/team/TeamCreate";
 import TeamList from "../../components/team/TeamList";
@@ -100,7 +100,7 @@ function TeamViewList({
         return;
       await setSubmitting(true);
       const variables = { email, phone, password, name, lastname, role_ids };
- 
+
       const response = await save({
         variables,
         update: async (proxy, { data }) => {
@@ -125,7 +125,7 @@ function TeamViewList({
           console.log("updates", updates);
         }
       });
- 
+
       const { ok, errors } = response.data.createTeamMember;
 
       if (ok) {
@@ -136,8 +136,7 @@ function TeamViewList({
         await setSubmitting(false);
         errors.forEach(async error => {
           const message = <FormattedMessage id={error.message} />;
-         await setFieldError(error.path, message);
-          
+          await setFieldError(error.path, message);
         });
       }
     } catch (error) {
@@ -160,7 +159,7 @@ function TeamViewList({
             fontStyle: "italic"
           }}
         >
-          {<FormattedMessage id="company_list" />}
+          Wa senYobante
         </Header>
         <Header
           floated="left"
