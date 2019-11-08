@@ -8,7 +8,10 @@ import { Header } from "semantic-ui-react";
 import { colors } from "../../utils/constants";
 import { FormattedMessage } from "react-intl";
 import ApolloCacheUpdater from "apollo-cache-updater";
-import { findRestaurersAdminQuery } from "../../graphql/query/user";
+import {
+  findRestaurersAdminQuery,
+  userCompanyQuery
+} from "../../graphql/query/user";
 import { createRestaurerMutation } from "../../graphql/mutation/user";
 import RestaurerCreate from "../../components/restaurer/RestaurerCreate";
 import RestaurerList from "../../components/restaurer/RestaurerList";
@@ -99,21 +102,29 @@ function TeamViewList({
           const mutationResult = data.createRestaurer.user; // mutation result to pass into the updater
           const updates = ApolloCacheUpdater({
             proxy, // apollo proxy
-            queriesToUpdate: [findRestaurersAdminQuery], // queries you want to automatically update
+            queriesToUpdate: [findRestaurersAdminQuery, userCompanyQuery], // queries you want to automatically update
             searchVariables: {},
             mutationResult,
             operation: {
               type: "ADD",
-              add: ({ data: { data, total, ...rest } }) => {
-                return {
-                  ...rest,
-                  total: total + 1,
-                  data: [{ ...mutationResult }, ...data]
-                };
+              add: ({ query, data }) => {
+                if (query.toString() === "findRestaurersAdmin") {
+                  return {
+                    ...data,
+                    total: data.total + 1,
+                    data: [{ ...mutationResult }, ...data.data]
+                  };
+                }
+
+                if (query.toString() === "userCompany") {
+                  return {
+                    data: [{ ...mutationResult }, ...data]
+                  };
+                }
               }
             }
           });
-          console.log("updates", updates);
+          
         }
       });
 
