@@ -14,7 +14,7 @@ export const colors = {
   RED: "red",
   //PINK: "#e84393",
   PINK: "#FFD700",
-  VIOLET: "#3f704d"
+  VIOLET: "#FF4500"
   //VIOLET:'#00b200',
   //VIOLET: "#9f40ff"
 };

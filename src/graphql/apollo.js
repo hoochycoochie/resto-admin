@@ -19,8 +19,12 @@ import {
 
 // developpement
 const graphqlUrl = `http://localhost:3001/graphql`;
+//const graphqlUrl = "https://senyobante.osc-fr1.scalingo.io/graphql";
 // const wsUrl = "ws://10.0.3.2:3000/subscriptions";
-const wsUrl = "ws://localhost:3001/graphql";
+//https://senyobante.osc-fr1.scalingo.io
+ const wsUrl = "ws://localhost:3001/graphql";
+
+//const wsUrl = "ws://senyobante.osc-fr1.scalingo.io/graphql";
 
 const cache = new InMemoryCache();
 
