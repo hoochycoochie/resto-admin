@@ -2,7 +2,6 @@ import { ApolloClient } from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { setContext } from "apollo-link-context";
 import { split, ApolloLink } from "apollo-link";
-import { createHttpLink } from "apollo-link-http";
 import { createUploadLink } from "apollo-upload-client";
 import { WebSocketLink } from "apollo-link-ws";
 import { withClientState } from "apollo-link-state";
@@ -18,13 +17,12 @@ import {
 } from "./store/query-mutation/settings";
 
 // developpement
-const graphqlUrl = `http://localhost:3001/graphql`;
-//const graphqlUrl = "https://senyobante.osc-fr1.scalingo.io/graphql";
-// const wsUrl = "ws://10.0.3.2:3000/subscriptions";
-//https://senyobante.osc-fr1.scalingo.io
- const wsUrl = "ws://localhost:3001/graphql";
+// const graphqlUrl = `http://localhost:3001/graphql`;
+// const wsUrl = "ws://localhost:3001/graphql";
 
-//const wsUrl = "ws://senyobante.osc-fr1.scalingo.io/graphql";
+//prod
+const graphqlUrl = `https://www.senyobante.site/graphql`;
+const wsUrl = "wss://senyobante.site/graphql";
 
 const cache = new InMemoryCache();
 

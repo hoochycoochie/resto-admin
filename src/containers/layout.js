@@ -14,8 +14,7 @@ import { Link } from "react-router-dom";
 import { ROOT_PATH, LOGIN_PATH } from "../utils/static_constants";
 import { FormattedMessage } from "react-intl";
 import { colors } from "../utils/constants";
-const logo =
-  "https://cdn1.vectorstock.com/i/1000x1000/13/80/organic-food-restaurant-logo-vector-17131380.jpg";
+import logo from "./yobante.png"
 const Layout = ({ children }) => (
   <div>
     <Menu
@@ -42,7 +41,7 @@ const Layout = ({ children }) => (
       {children}
     </Container>
 
-    <Segment
+    {/* <Segment
       inverted
       vertical
       style={{
@@ -106,7 +105,7 @@ const Layout = ({ children }) => (
           </List.Item>
         </List>
       </Container>
-    </Segment>
+    </Segment> */}
   </div>
 );
 

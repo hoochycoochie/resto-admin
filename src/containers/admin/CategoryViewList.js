@@ -124,7 +124,7 @@ function CategoryViewList({
         await setCreateModal(false);
       } else {
         await setSubmitting(false);
-
+        console.log("errors",errors)
         errors.forEach(error => {
           const message = <FormattedMessage id={error.message} />;
           setFieldError(error.path, message);
